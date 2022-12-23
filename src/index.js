@@ -2,6 +2,8 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const crypto = require('crypto');
+const emailv = require('./midlewares/emailv');
+const passwordv = require('./midlewares/passwordV');
 
 const app = express(); // essa função cria um servidor web http
 app.use(express.json());
@@ -27,11 +29,11 @@ app.get('/talker/:id', async (req, res) => { // AJUDA DO MEU AMIGO JHONATAS ANIC
   return res.status(200).json(talkerid);
 });
 
-app.post('/login', async (_req, res) => { // resolvi usar a biblioteca require e chamar o crypto, ultilizei uma constante de token pra depois ultilizar a minha biblioteca
+app.post('/login', emailv, passwordv, (req, res) => { // resolvi usar a biblioteca require e chamar o crypto, ultilizei uma constante de token pra depois ultilizar a minha biblioteca
     const token = crypto.randomBytes(8).toString('hex');
   return res.status(200).json({ token }); // {token} serve para eu poder chamar como string
 });
 
 app.listen(PORT, () => {
   console.log('Online');
-});// 
+});//
