@@ -57,7 +57,19 @@ app.post('/talker', tokenn, namevalid, agevalid, talkval, validwatch, ratesVal,
             await fs.writeFile(newdirectorio, JSON.stringify(newPalestrante)); 
              return res.status(201).json(palestrante);
   });
-
+// Os meus midlewares ja estão criados então é só mudar post para push 
+  app.put('/talker/:id', tokenn, namevalid, agevalid, talkval, validwatch, ratesVal, 
+   async (req, res) => {   
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+    const newPalest = JSON.parse(await
+      fs.readFile(path.resolve('./src/talker.json'), 'utf-8'));
+      const index = newPalest.findIndex((element) => element.id === Number(id));
+      newPalest[index] = { id: Number(id), name, age, talk };
+      await fs.writeFile(newdirectorio, JSON.stringify(newPalest)); 
+      res.status(200).json(newPalest[index]);
+  }); 
+ 
 app.listen(PORT, () => {
   console.log('Online');
 });//
