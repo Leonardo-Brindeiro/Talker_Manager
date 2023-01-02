@@ -11,6 +11,8 @@ const talkval = require('./midlewares/talkval');
 const ratesVal = require('./midlewares/ratesval');
 const validwatch = require('./midlewares/validwatch');
 
+const newdirectorio = path.resolve(__dirname, './talker.json');
+
 const app = express(); // essa função cria um servidor web http
 app.use(express.json());
 
@@ -42,19 +44,18 @@ app.post('/login', emailv, passwordv, (req, res) => { // resolvi usar a bibliote
 
 app.post('/talker', tokenn, namevalid, agevalid, talkval, validwatch, ratesVal, 
    async (req, res) => {
-    const newPalestrante = await fs.readFile(path.resolve('./src/talker.json'));
-   const { name, age, talk } = req.body; // vai pegar no meu arquivo json as propriedades 
+     const { name, age, talk } = req.body; // vai pegar no meu arquivo json as propriedades 
+     const newPalestrante = JSON.parse(await
+       fs.readFile(path.resolve('./src/talker.json'), 'utf-8'));
    const palestrante = {
-     id: newPalestrante[newPalestrante.length - 1].id + 1, // vai  
+     id: newPalestrante[newPalestrante.length - 1].id + 1, // propriedades ajustadas 
      name,
      age,
      talk,
     };
     newPalestrante.push(palestrante);
-    const updatePalestrante = JSON.stringify([...newPalestrante, palestrante]);
-          fs.writeFile(path.resolve('./src/talker.json'), updatePalestrante);
-        const novoPalestrante = newPalestrante[newPalestrante];
-        return res.status(201).json(novoPalestrante);
+            await fs.writeFile(newdirectorio, JSON.stringify(newPalestrante)); 
+             return res.status(201).json(palestrante);
   });
 
 app.listen(PORT, () => {
