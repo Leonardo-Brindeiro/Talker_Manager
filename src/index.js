@@ -44,15 +44,15 @@ app.post('/talker', tokenn, namevalid, agevalid, talkval, validwatch, ratesVal,
    async (req, res) => {
     const newPalestrante = await fs.readFile(path.resolve('./src/talker.json'));
    const { name, age, talk } = req.body; // vai pegar no meu arquivo json as propriedades 
-    const palestrante = {
-      id: newPalestrante[newPalestrante.length - 1].id + 1, // vai  
-      name,
-      age,
-      talk,
+   const palestrante = {
+     id: newPalestrante[newPalestrante.length - 1].id + 1, // vai  
+     name,
+     age,
+     talk,
     };
     newPalestrante.push(palestrante);
     const updatePalestrante = JSON.stringify([...newPalestrante, palestrante]);
-          fs.writeFile(updatePalestrante);
+          fs.writeFile(path.resolve('./src/talker.json'), updatePalestrante);
         const novoPalestrante = newPalestrante[newPalestrante];
         return res.status(201).json(novoPalestrante);
   });
