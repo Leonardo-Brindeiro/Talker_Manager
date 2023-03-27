@@ -29,7 +29,7 @@ app.get('/', (_request, response) => {
 app.get('/talker/search', tokenn, async (req, res) => {
   const { q } = req.query;
   const newPalestr = JSON.parse(await
-    fs.readFile(path.resolve(newdirectorio), 'utf-8'));
+    fs.readFile(path.resolve(newdirectorio)));
 
     const indexx = newPalestr.filter((element) => element.name.includes(q));
   if (!indexx) {
@@ -39,13 +39,13 @@ app.get('/talker/search', tokenn, async (req, res) => {
 });
 
 app.get('/talker', async (_req, res) => {
-  const talker = JSON.parse(await fs.readFile(path.resolve(newdirectorio), 'utf-8'));
+  const talker = JSON.parse(await fs.readFile(path.resolve(newdirectorio)));
   return res.status(200).json(talker);
 });
 
 app.get('/talker/:id', async (req, res) => { // AJUDA DO MEU AMIGO JHONATAS ANICEZIO
   const { id } = req.params;
-  const talker = JSON.parse(await fs.readFile(path.resolve(newdirectorio), 'utf-8'));
+  const talker = JSON.parse(await fs.readFile(path.resolve(newdirectorio)));
   const talkerid = talker.find((e) => e.id === Number(id));
   if (!talkerid) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   return res.status(200).json(talkerid);
@@ -78,7 +78,7 @@ app.post('/talker', tokenn, namevalid, agevalid, talkval, validwatch, ratesVal,
     const { id } = req.params;
     const { name, age, talk } = req.body;
     const newPalest = JSON.parse(await
-      fs.readFile(path.resolve(newdirectorio), 'utf-8'));
+      fs.readFile(path.resolve(newdirectorio)));
       const index = newPalest.findIndex((element) => element.id === Number(id));
       newPalest[index] = { id: Number(id), name, age, talk };
       await fs.writeFile(newdirectorio, JSON.stringify(newPalest)); 
@@ -90,7 +90,7 @@ app.post('/talker', tokenn, namevalid, agevalid, talkval, validwatch, ratesVal,
    async (req, res) => {  
     const { id } = req.params;
      const newPalestt = JSON.parse(await
-      fs.readFile(path.resolve(newdirectorio), 'utf-8'));
+      fs.readFile(path.resolve(newdirectorio)));
       const index = newPalestt.filter((idp) => idp.id !== Number(id));
       await fs.writeFile(newdirectorio, JSON.stringify(index, null, 2)); 
      return res.status(204).json();
